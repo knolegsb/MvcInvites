@@ -13,16 +13,37 @@
     <link href="~/Content/Sytle.css" rel="stylesheet" />
 </head>
 <body>
-    <div>
+    @{ 
+        try
+        {
+            WebMail.SmtpServer = "smtp.hotmail.com";
+            WebMail.SmtpPort = 587;
+            WebMail.EnableSsl = true;
+            WebMail.UserName = "mySmtpUserName";
+            WebMail.Password = "mySmtpPassword";
+            WebMail.From = "seon2you@hotmail.com";
+
+            WebMail.Send("seon2you@hotmail.com", "RSVP Notification", Model.Name + " is " + ((Model.WillAttend ?? false) ? "" : "not") + "attending");
+        }
+        catch (Exception)
+        {
+            @:<p class="text-center"><b>Sorry - we couldn't send the email to confirm your RSVP.</b></p>
+        }
+    }
+
+    <div class="text-center">
         <h1>Thank you, @Model.Name!</h1>
-        @if (Model.WillAttend == true)
-        {
-            @:It's great that you're coming. The drinks are already in the fridge!
-        }
-        else
-        {
-            @: Sorry to hear that you can't make it, but thanks for letting us know.
-        }
+
+        <div class="lead">
+            @if (Model.WillAttend == true)
+            {
+                @:It's great that you're coming. The drinks are already in the fridge!
+            }
+            else
+            {
+                @: Sorry to hear that you can't make it, but thanks for letting us know.
+            }
+        </div>
     </div>
 </body>
 </html>
